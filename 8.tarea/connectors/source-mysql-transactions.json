@@ -1,0 +1,20 @@
+{
+  "name": "source-mysql-transactions",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+    "connection.url": "jdbc:mysql://mysql:3306/db?user=user&password=password&useSSL=false",
+    "topic.prefix": "sales-",
+    "poll.interval.ms" : 10000,
+    "mode":"timestamp",
+    "timestamp.column.name":"timestamp",
+    "transforms":"createKey,extractInt,DecimalToFloat",
+    "table.whitelist":"transactions",
+    "transforms.createKey.type":"org.apache.kafka.connect.transforms.ValueToKey",
+    "transforms.createKey.fields":"transaction_id",
+    "transforms.extractInt.type":"org.apache.kafka.connect.transforms.ExtractField$Key",
+    "transforms.extractInt.field":"transaction_id",
+    "transforms.DecimalToFloat.type": "org.apache.kafka.connect.transforms.Cast$Value",
+    "transforms.DecimalToFloat.spec": "price:float32",
+    "tasks.max": "1"
+  }
+}
